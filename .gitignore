@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# local runtime / secrets
+.env
+*.log
+scripts/*.log
+
+# node
+node_modules/
+

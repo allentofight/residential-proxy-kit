@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>代理安全检测</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1b2430;
+      --muted: #6b7a90;
+      --ok: #0a8f3f;
+      --fail: #d93025;
+      --warn: #b26a00;
+      --line: #e6ebf2;
+      --btn: #0f62fe;
+      --btn-hover: #0b52d1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef3fb 0%, var(--bg) 240px);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(16, 40, 70, 0.06);
+      overflow: hidden;
+    }
+    .head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+    .title {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .controls {
+      padding: 16px 20px;
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcff;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    input {
+      width: 210px;
+      border: 1px solid #cfd8e6;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    input:focus {
+      border-color: #7ba7ff;
+      box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.12);
+    }
+    button {
+      border: none;
+      background: var(--btn);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: var(--btn-hover); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .summary {
+      padding: 16px 20px 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .summary.ok { color: var(--ok); }
+    .summary.fail { color: var(--fail); }
+    .summary.pending { color: var(--warn); }
+    .meta {
+      padding: 0 20px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .list {
+      padding: 0 20px 18px;
+      display: grid;
+      gap: 10px;
+    }
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .badge {
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-weight: 700;
+    }
+    .badge.ok {
+      color: var(--ok);
+      background: rgba(10, 143, 63, 0.12);
+    }
+    .badge.fail {
+      color: var(--fail);
+      background: rgba(217, 48, 37, 0.12);
+    }
+    .item-detail {
+      color: #3f4e63;
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+    .hint {
+      padding: 0 20px 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    code {
+      background: #f0f4fa;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f3;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="head">
+        <h1 class="title">代理安全检测</h1>
+        <p class="sub">登录前先检测。只有全部通过（PASS）才登录 Claude / GPT / Gemini / 反重力。</p>
+      </div>
+
+      <div class="controls">
+        <div class="row">
+          <label for="expectedIp">预期家宽 IP</label>
+          <input id="expectedIp" value="" placeholder="例如：x.x.x.x" />
+          <button id="runBtn">开始检测</button>
+        </div>
+      </div>
+
+      <div id="summary" class="summary pending">等待检测</div>
+      <div id="meta" class="meta">点击“开始检测”</div>
+      <div id="list" class="list"></div>
+      <div class="hint">
+        如果失败，不要登录。先修复后再检测。<br>
+        如需命令行检测，也可运行：<code>~/.claude/residential-proxy/preflight.sh</code>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const summaryEl = document.getElementById('summary');
+    const metaEl = document.getElementById('meta');
+    const listEl = document.getElementById('list');
+    const runBtn = document.getElementById('runBtn');
+    const expectedIpEl = document.getElementById('expectedIp');
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function renderChecks(checks) {
+      listEl.innerHTML = checks.map((item) => {
+        const badgeClass = item.passed ? 'ok' : 'fail';
+        const badgeText = item.passed ? 'PASS' : 'FAIL';
+        return `
+          <div class="item">
+            <div class="item-head">
+              <div class="item-name">${escapeHtml(item.name)}${item.required ? '' : '（信息项）'}</div>
+              <span class="badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <div class="item-detail">${escapeHtml(item.detail || '')}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function runCheck() {
+      const expectedIp = expectedIpEl.value.trim();
+      if (!expectedIp) {
+        alert('请先填写预期家宽 IP');
+        return;
+      }
+
+      runBtn.disabled = true;
+      summaryEl.className = 'summary pending';
+      summaryEl.textContent = '检测中，请稍等...';
+      metaEl.textContent = '';
+      listEl.innerHTML = '';
+
+      try {
+        const resp = await fetch(`/api/check?expectedIp=${encodeURIComponent(expectedIp)}`, {
+          method: 'GET',
+          cache: 'no-store',
+        });
+
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        renderChecks(data.checks || []);
+
+        const checkedAt = data.checkedAt ? new Date(data.checkedAt).toLocaleString() : '未知';
+        metaEl.textContent = `检测时间：${checkedAt} ｜ 预期家宽 IP：${data.expectedIp || expectedIp}`;
+
+        if (data.ok) {
+          summaryEl.className = 'summary ok';
+          summaryEl.textContent = '✅ 检测通过：可以登录';
+        } else {
+          summaryEl.className = 'summary fail';
+          summaryEl.textContent = '❌ 检测失败：先修复，不要登录';
+        }
+      } catch (error) {
+        summaryEl.className = 'summary fail';
+        summaryEl.textContent = '❌ 检测服务不可用';
+        metaEl.textContent = `错误：${error && error.message ? error.message : String(error)}`;
+      } finally {
+        runBtn.disabled = false;
+      }
+    }
+
+    runBtn.addEventListener('click', runCheck);
+    runCheck();
+  </script>
+</body>
+</html>
