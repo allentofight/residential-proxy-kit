@@ -14,7 +14,7 @@
 ### 1.1 克隆仓库
 
 ```bash
-git clone https://github.com/<your-account>/residential-proxy-kit.git
+git clone https://github.com/allentofight/residential-proxy-kit.git
 cd residential-proxy-kit
 ```
 
