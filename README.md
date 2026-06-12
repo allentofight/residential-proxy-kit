@@ -38,23 +38,7 @@ bash ./scripts/install-on-mac.sh \
 
 配置说明，首先访问：[https://www.lycheeip.com/ip/static/order](https://www.lycheeip.com/ip/static/order)
 
-点击详情出现弹框
-
-![info](https://pic1.imgdb.cn/item/6a2c1c09ad4b105876848a5a.png)
-
-则相应的 bash 命令应该为:
-
-```
-bash ./scripts/install-on-mac.sh \
-  --res-host 38.13.22.49 \
-  --res-port 27114 \
-  --res-user 08c1b1dc \
-  --res-pass 35bfdsfd41a11 \
-  --expected-ip 38.13.22.49 \
-  --wifi-service "Wi-Fi" \
-  --clash-port 7897
-```
-
+![IP详情标注图_修正版](https://pic1.imgdb.cn/item/6a2c2472ad4b10587684915d.png)
 
 
 ## 2. 登录前验收（强烈建议）
