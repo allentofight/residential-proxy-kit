@@ -36,6 +36,27 @@ bash ./scripts/install-on-mac.sh \
 - `--expected-ip` 用于严格验收，建议填写。
 - `--clash-port` 是 Clash mixed-port，默认 `7897`。
 
+配置说明，首先访问：[https://www.lycheeip.com/ip/static/order](https://www.lycheeip.com/ip/static/order)
+
+点击详情出现弹框
+
+![ip信息](https://pic1.imgdb.cn/item/6a2c176fad4b10587684863b.png)
+
+则相应的 bash 命令应该为:
+
+```
+bash ./scripts/install-on-mac.sh \
+  --res-host 38.13.22.49 \
+  --res-port 27114 \
+  --res-user 08c1b1dc \
+  --res-pass 35bfdsfd41a11 \
+  --expected-ip 38.13.22.49 \
+  --wifi-service "Wi-Fi" \
+  --clash-port 7897
+```
+
+
+
 ## 2. 登录前验收（强烈建议）
 
 ### 2.1 打开检测页面
