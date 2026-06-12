@@ -40,7 +40,7 @@ bash ./scripts/install-on-mac.sh \
 
 点击详情出现弹框
 
-![ip信息](https://pic1.imgdb.cn/item/6a2c176fad4b10587684863b.png)
+![info](https://pic1.imgdb.cn/item/6a2c1c09ad4b105876848a5a.png)
 
 则相应的 bash 命令应该为:
 
