@@ -40,6 +40,14 @@ bash ./scripts/install-on-mac.sh \
 
 ![IP详情标注图_修正版](https://pic1.imgdb.cn/item/6a2c2472ad4b10587684915d.png)
 
+若执行中碰到如下问题：
+
+```bash
+node not found. Install Node.js first.
+```
+
+则去 https://nodejs.org 下载 macOS 的 .pkg 安装包，双击安装即可，安装后重新打开终端，再执行以上命令
+
 
 ## 2. 登录前验收（强烈建议）
 
